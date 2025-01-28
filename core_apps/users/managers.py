@@ -34,7 +34,7 @@ class UserManager(DjangoUserManager):
 
         global_user_model = apps.get_model(
             self.model._meta.app_label,
-            self.model._meta.obejct_name,
+            self.model._meta.object_name,
         )
 
         username = global_user_model.normalize_username(username)
