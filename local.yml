@@ -50,6 +50,20 @@ services:
     networks:
       - estate_prod_nw
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./docker/local/Dockerfile
+    image: estate_frontend
+    container_name: estate_frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    networks:
+      - estate_prod_nw
+
 networks:
   estate_prod_nw:
     external: true
