@@ -18,6 +18,8 @@ SECRET_KEY = getenv(
     "c8U8W599hbcniqNbapXosH2vbF5gZN2AbNqciscui9hKSbIPmRM",
 )
 
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8080"]
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
