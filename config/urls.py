@@ -1,16 +1,16 @@
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path
+from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+
 
 schema_view = get_schema_view(
     openapi.Info(
         title="Alpha Apartments API",
         default_version="v1",
-        description="Apartment Management API for Real Estate.",
-        terms_of_service="https://www.google.com/policies/terms/",
+        description="Apartment Management API for Real Estate",
         contact=openapi.Contact(email="bdas16001@gmail.com"),
         license=openapi.License(name="MIT License"),
     ),
@@ -27,7 +27,7 @@ urlpatterns = [
         ),
         name="schema-redoc",
     ),
-    path(settings.ADMIN_URL, admin.site.urls),
+    path(settings.LOGIN_URL, admin.site.urls),
 ]
 
 admin.site.site_header = "Alpha Apartments Admin"

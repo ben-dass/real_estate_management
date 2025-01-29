@@ -1,2 +1,1 @@
-FROM docker.io/library/postgres:17-bullseye
-
+FROM docker.io/postgres:16-bullseye

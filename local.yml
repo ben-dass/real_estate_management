@@ -17,6 +17,7 @@ services:
     depends_on:
       - postgres
       - mailpit
+      - redis
     command: /start
     networks:
       - estate_prod_nw
@@ -37,11 +38,11 @@ services:
       - estate_prod_nw
 
   mailpit:
-    image: docker.io/axllent/mailpit:v1.22
+    image: docker.io/axllent/mailpit:v1.15
     container_name: estate_prod_mailpit
     ports:
-      - "1025:1025"
       - "8025:8025"
+      - "1025:1025"
     volumes:
       - estate_prod_mailpit_data:/data
     environment:
@@ -52,21 +53,53 @@ services:
     networks:
       - estate_prod_nw
 
-  frontend:
+  client:
     build:
-      context: ./frontend
+      context: ./client
       dockerfile: ./docker/local/Dockerfile
-    image: estate_frontend
-    container_name: estate_frontend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+    container_name: estate_client
+    image: estate_client
     # ports:
     #   - "3000:3000"
     expose:
       - "3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    # add this line(uncomment it) so that hot module reloading can work when working with windows subsystem for linux.
+    # environment:
+    #   - WATCHPACK_POLLING=true
     networks:
       - estate_prod_nw
+
+  redis:
+    image: redis:7.0-alpine3.19
+    command: redis-server --appendonly yes
+    container_name: estate_redis
+    volumes:
+      - estate_redis_prod_data:/data
+    networks:
+      - estate_prod_nw
+
+  celeryworker:
+    <<: *api
+    image: estate_prod_celeryworker
+    container_name: estate_prod_celeryworker
+    command: /start-celeryworker
+
+  celerybeat:
+    <<: *api
+    image: estate_prod_celerybeat
+    container_name: estate_prod_celerybeat
+    command: /start-celerybeat
+
+  flower:
+    <<: *api
+    image: estate_prod_flower
+    container_name: estate_prod_flower
+    ports:
+      - "5555:5555"
+    command: /start-flower
 
   nginx:
     build:
@@ -92,3 +125,4 @@ volumes:
   estate_prod_postgres_data: {}
   estate_prod_mailpit_data: {}
   logs_store: {}
+  estate_redis_prod_data: {}

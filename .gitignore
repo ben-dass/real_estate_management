@@ -185,42 +185,43 @@ cython_debug/
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-!frontend/src/lib
-frontend/node_modules
-frontend/.pnp
-frontend/.pnp.*
-frontend/.yarn/*
-!frontend/.yarn/patches
-!frontend/.yarn/plugins
-!frontend/.yarn/releases
-!frontend/.yarn/versions
+!client/src/lib
+client/node_modules
+client/.pnp
+client/.pnp.*
+client/.yarn/*
+!client/.yarn/patches
+!client/.yarn/plugins
+!client/.yarn/releases
+!client/.yarn/versions
 
 # testing
-frontend/coverage
+client/coverage
 
 # next.js
-frontend/.next/
-frontend/out/
+client/.next/
+client/out/
 
 # production
-frontend/build
+client/build
 
 # misc
-frontend/.DS_Store
-frontend/*.pem
+client/.DS_Store
+client/*.pem
+client/package-lock.json
 
 # debug
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
-frontend/.pnpm-debug.log*
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+client/.pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-frontend/.env*
+client/.env*
 
 # vercel
-frontend/.vercel
+client/.vercel
 
 # typescript
-frontend/*.tsbuildinfo
-frontend/next-env.d.ts
+client/*.tsbuildinfo
+client/next-env.d.ts

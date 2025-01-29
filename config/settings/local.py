@@ -1,7 +1,9 @@
 from os import getenv, path
+
 from dotenv import load_dotenv
 
 from .base import *  # noqa
+
 from .base import BASE_DIR
 
 local_env_file = path.join(BASE_DIR, ".envs", ".env.local")
@@ -11,14 +13,15 @@ if path.isfile(local_env_file):
 
 DEBUG = True
 
-SITE_NAME = getenv("SITE_NAME", "Django Base Project")
+SITE_NAME = getenv("SITE_NAME")
 
 SECRET_KEY = getenv(
     "DJANGO_SECRET_KEY",
-    "c8U8W599hbcniqNbapXosH2vbF5gZN2AbNqciscui9hKSbIPmRM",
+    "s8NQEGslhxMZIWVimnCNETFp0P3RnN-tCl8HSVRmoVBS2yYUcJ4",
 )
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8080"]
+
 
 ALLOWED_HOSTS = [
     "localhost",
