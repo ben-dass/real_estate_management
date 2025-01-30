@@ -2,6 +2,7 @@ from pathlib import Path
 from os import getenv, path
 from dotenv import load_dotenv
 import cloudinary
+from datetime import timedelta
 
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -160,3 +161,66 @@ cloudinary.config(
     api_secret=CLOUDINARY_API_SECRET,
     secure=True,
 )
+
+COOKIE_NAME = "access"
+COOKIE_SAMESITE = "Lax"
+COOKIE_PATH = "/"
+COOKIE_HTTPONLY = True
+COOKIE_SECURE = getenv("COOKIE_SECURE", True) == "True"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "core_apps.common.cookie_auth.CookieAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_PAGINATION_CLASS": ("rest_framework.pagination.PageNumberPagination",),
+    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "PAGE_SIZE": 10,
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "200/hour",
+        "user": "500/hour",
+    },
+}
+
+SIMPLE_JWT = {
+    "SIGNING_KEY": getenv("SIGNING_KEY"),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+}
+
+DJOSER = {
+    "USER_ID_FIELD": "id",
+    "LOGIN_FIELD": "email",
+    "TOKEN_MODEL": None,
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "SEND_ACTIVATION_EMAIL": True,
+    "SEND_CONFIRMATION_EMAIL": True,
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": "password-reset/{uid}/{token}",
+    "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": getenv("REDIRECT_URIS", "").split(","),
+    "SERIALIZERS": {
+        "user_create": "core_apps.users.serializers.CreateUserSerializer",
+    },
+}
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv("GOOGLE_CLIENT_ID")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv("GOOGLE_CLIENT_SECRET")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "openid",
+]
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = [
+    "first_name",
+    "last_name",
+]
