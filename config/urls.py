@@ -27,7 +27,8 @@ urlpatterns = [
         ),
         name="schema-redoc",
     ),
-    path(settings.LOGIN_URL, admin.site.urls),
+    # path(settings.LOGIN_URL, admin.site.urls),
+    path(settings.ADMIN_URL, admin.site.urls),
 ]
 
 admin.site.site_header = "Alpha Apartments Admin"
